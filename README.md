@@ -6,12 +6,30 @@ With Redex you can leverage the simplicity of AWS Lambda without resource and ra
 Redex provides an endpoint you can call with a Lambda ARN in a header. Redex will download the version of the Lambda function you specify and execute it. The function code is then cached and ready for the next execution.
 
 
-## Installation
+## Building the Amazon Liunx Docker image
 
-### TODO: Explain how to make Amazon Linux Docker image
+Unfortunately at this time Amazon does not provide a Docker image of Amazon Linux. To build one start an Amazon Linux EC2 instance. You may want to add a role to the instance that allows access to ECS if you plan to use it. Once the instance is ready install docker and git with the following commands.
+
+```bash
+sudo yum install -y docker git && sudo service docker start
+sudo usermod -aG docker ec2-user
+```
+
+At this point you will need to logout of the instance and log back in so that you have the proper permissions to use Docker.
+
+Copy the Dockerfile from this repo to the instance and then build the image.
+
+```bash
+mkdir redex && git clone https://github.com/madmod/redex redex && cd redex
+docker build -t redex .
+```
+
+Once that is complete you have a Docker image ready to run Lambda functions. You can now publish this image to a private Docker registry such as Amazon ECR.
+
+See [Getting Started with Amazon ECR](http://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_GetStarted.html) for instructions on pusing the image to your private repository.
 
 
-## Configuration
+### TODO: Explain how to use ECS.
 
 
 ## API Gateway
